@@ -1,0 +1,10 @@
+<main>
+  <h1 class="title">Shop</h1>
+  <section class="grid">
+    @for (product of products; track product.name) {
+      <app-product-card [name]="product.name">
+        <app-price-tag [amount]="product.price" />
+      </app-product-card>
+    }
+  </section>
+</main>
