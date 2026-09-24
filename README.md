@@ -3,8 +3,8 @@
 Hold Alt (Option on macOS), hover any element to see which component and which template line it
 comes from, and Alt+click to open that exact line in your editor.
 
-This is a small experiment to see how far the pieces already in Angular get us. It's meant to go
-with a feature request on angular/angular, it's not a library.
+This is a small experiment to see how far the pieces already in Angular get us. It goes with
+[angular/angular#70927](https://github.com/angular/angular/issues/70927), it's not a library.
 
 ## Try it
 
