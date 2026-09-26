@@ -24,9 +24,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ]
+            "styles": ["src/styles.css"]
           },
           "configurations": {
             "production": {
@@ -67,6 +65,32 @@
         },
         "test": {
           "builder": "@angular/build:unit-test"
+        }
+      }
+    },
+    "ngx-source-inspector": {
+      "projectType": "library",
+      "root": "projects/ngx-source-inspector",
+      "sourceRoot": "projects/ngx-source-inspector/src",
+      "prefix": "nsi",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-source-inspector/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/ngx-source-inspector/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/ngx-source-inspector/tsconfig.spec.json"
+          }
         }
       }
     }

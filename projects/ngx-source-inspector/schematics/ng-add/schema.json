@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "ngx-source-inspector-ng-add",
+  "title": "ngx-source-inspector ng-add schematic",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "The application to set up.",
+      "$default": {
+        "$source": "projectName"
+      }
+    }
+  }
+}
