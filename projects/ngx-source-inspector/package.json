@@ -1,0 +1,32 @@
+{
+  "name": "ngx-source-inspector",
+  "version": "0.1.0",
+  "description": "Hold Alt, hover an element of your Angular app to see which template line it comes from, Alt+click to open it in your editor. Development only.",
+  "keywords": [
+    "angular",
+    "devtools",
+    "open-in-editor",
+    "inspector",
+    "template",
+    "source-location"
+  ],
+  "license": "MIT",
+  "author": "Amine",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aminesbdev/angular-source-inspector.git"
+  },
+  "homepage": "https://github.com/aminesbdev/angular-source-inspector#readme",
+  "bugs": {
+    "url": "https://github.com/aminesbdev/angular-source-inspector/issues"
+  },
+  "peerDependencies": {
+    "@angular/common": "^22.2.0",
+    "@angular/core": "^22.2.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "schematics": "./schematics/collection.json",
+  "sideEffects": false
+}
