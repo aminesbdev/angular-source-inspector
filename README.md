@@ -5,6 +5,8 @@ which template line it comes from. Alt+click opens that line in your editor.
 
 It only runs in development builds.
 
+![Holding Alt over the demo app shows the component and the template line of each element](https://raw.githubusercontent.com/aminesbdev/angular-source-inspector/main/docs/demo.gif)
+
 > **Experimental.** This relies on `enableTemplateSourceLocations`, a compiler option that Angular
 > doesn't document and doesn't cover by semver. It could change or go away in any release. Tested
 > with Angular 22.2. This isn't an official Angular package. The proposal to support this in Angular
