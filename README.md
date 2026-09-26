@@ -33,7 +33,12 @@ LAUNCH_EDITOR=code npm start
 - `src/dev/source-inspector.ts` reads that attribute on hover and click. It falls back to the
   component's debug info (class file and line) when the attribute isn't there. That fallback reads
   the private `ɵcmp`.
-- `src/main.ts` only loads the inspector when `isDevMode()` is true.
+- `src/main.ts` only loads the inspector in development. It checks `ngDevMode` directly rather
+  than calling `isDevMode()`: a production build replaces `ngDevMode` with `false`, so the import
+  is dropped and no inspector chunk ends up in `dist/`. With `isDevMode()` the bundler can't do
+  that, and the chunk was emitted (though never loaded).
+- Only project-relative paths found on elements rendered by an Angular component are sent to the
+  dev server, so injected markup can't be used to open a file outside the project.
 
 ## Things worth knowing
 
@@ -44,3 +49,15 @@ LAUNCH_EDITOR=code npm start
   its own template.
 - The demo covers an external template (`product-card`), an inline template (`price-tag.ts`) and
   content projection.
+
+## Known limitations
+
+- **Shadow DOM**: in a component using `ViewEncapsulation.ShadowDom`, the event target is the host,
+  so you get the line where the component is used rather than the element inside it.
+- **Paths**: the compiler makes paths relative to `rootDir`/`rootDirs` and may lowercase them on
+  case-insensitive file systems, while `/__open-in-editor` resolves them from the directory where
+  `ng serve` runs. With a custom `rootDir`, or in a multi-project workspace, Alt+click can point to
+  the wrong place.
+- **Alt key**: some Linux window managers use Alt+click themselves, and on Windows AltGr is
+  reported as Alt. The modifier would need to be configurable in a real tool.
+- Only `click` is intercepted, so `mousedown`/`pointerdown` handlers on the element still run.

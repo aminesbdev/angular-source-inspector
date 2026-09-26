@@ -31,10 +31,22 @@ export function parseSourceLocation(value: string): SourceLocation | null {
   return {file: match[1], line: Number(match[2]) + 1, column: Number(match[3]) + 1, kind: 'template'};
 }
 
+/**
+ * The path is sent to the dev server, which opens it in the editor. Only accept project-relative
+ * paths, so an attribute that didn't come from the compiler (injected HTML, a browser extension)
+ * can't be used to open an arbitrary file.
+ */
+function isProjectRelativePath(file: string): boolean {
+  const isAbsolute = /^([a-zA-Z]:)?[\\/]/.test(file);
+  return !isAbsolute && !file.split(/[\\/]/).includes('..');
+}
+
 export function findSourceLocation(element: Element): SourceLocation | null {
   const tagged = element.closest(`[${SOURCE_LOCATION_ATTR}]`);
-  if (tagged) {
-    return parseSourceLocation(tagged.getAttribute(SOURCE_LOCATION_ATTR)!);
+  // Only trust the attribute on elements rendered by an Angular component.
+  if (tagged && owningComponent(tagged)) {
+    const location = parseSourceLocation(tagged.getAttribute(SOURCE_LOCATION_ATTR)!);
+    return location && isProjectRelativePath(location.file) ? location : null;
   }
 
   // Fallback when template locations are off: the owning component's class.
