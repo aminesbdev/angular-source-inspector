@@ -102,4 +102,54 @@ describe('ng-add', () => {
       /no "development" build configuration/,
     );
   });
+
+  describe('before the compiler option exists', () => {
+    const logs: string[] = [];
+    runner.logger.subscribe((entry) => logs.push(entry.message));
+
+    beforeEach(() => {
+      const packageJson = readJson(tree, 'package.json');
+      packageJson.dependencies['@angular/core'] = '^21.2.0';
+      tree.overwrite('package.json', JSON.stringify(packageJson, null, 2));
+      logs.length = 0;
+    });
+
+    it('leaves the build configuration alone and points to the preload', async () => {
+      const angularJson = tree.readText('angular.json');
+
+      const result = await runner.runSchematic('ng-add', { project: 'app' }, tree);
+
+      assert.equal(result.readText('angular.json'), angularJson);
+      assert.equal(result.exists('projects/app/tsconfig.dev.json'), false);
+      assert.match(
+        logs.join('\n'),
+        /NODE_OPTIONS="--import ngx-source-inspector\/enable-source-locations" ng serve/,
+      );
+    });
+
+    it('adds provideSourceInspector() to the application providers', async () => {
+      const result = await runner.runSchematic('ng-add', { project: 'app' }, tree);
+
+      assert.match(
+        result.readText('projects/app/src/app/app.config.ts'),
+        /provideSourceInspector\(\)/,
+      );
+    });
+
+    it('goes by the installed version rather than the one in package.json', async () => {
+      tree.create('node_modules/@angular/core/package.json', '{"version": "22.1.4"}');
+
+      const result = await runner.runSchematic('ng-add', { project: 'app' }, tree);
+
+      assert.equal(result.exists('projects/app/tsconfig.dev.json'), true);
+    });
+
+    it('still needs the preload in the 22 releases that came before the option', async () => {
+      tree.create('node_modules/@angular/core/package.json', '{"version": "22.1.3"}');
+
+      const result = await runner.runSchematic('ng-add', { project: 'app' }, tree);
+
+      assert.equal(result.exists('projects/app/tsconfig.dev.json'), false);
+    });
+  });
 });

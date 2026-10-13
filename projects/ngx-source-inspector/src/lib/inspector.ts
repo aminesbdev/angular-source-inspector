@@ -104,7 +104,8 @@ export function install(doc: Document, options: SourceInspectorOptions = {}): ()
         warnedMissingLocations = true;
         console.warn(
           '[ngx-source-inspector] No element has a `data-ng-source-location` attribute. Is the ' +
-            '`enableTemplateSourceLocations` compiler option on for this build? `ng add ngx-source-inspector` sets it up.',
+            '`enableTemplateSourceLocations` compiler option on for this build? `ng add ngx-source-inspector` sets it up. ' +
+            'Before Angular 22.1.4, start `ng serve` with the `ngx-source-inspector/enable-source-locations` preload instead.',
         );
       }
       hide();
