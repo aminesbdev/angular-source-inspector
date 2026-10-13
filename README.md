@@ -9,8 +9,8 @@ It only runs in development builds.
 
 > **Experimental.** This relies on `enableTemplateSourceLocations`, a compiler option that Angular
 > doesn't document and doesn't cover by semver. It could change or go away in any release. Tested
-> with Angular 22.2. This isn't an official Angular package. The proposal to support this in Angular
-> itself is [angular/angular#70927](https://github.com/angular/angular/issues/70927).
+> with Angular 21.2 and 22.2. This isn't an official Angular package. The proposal to support this
+> in Angular itself is [angular/angular#70927](https://github.com/angular/angular/issues/70927).
 
 ## Install
 
@@ -58,6 +58,25 @@ Then run `ng serve`, hold Alt and move the mouse over the page.
    };
    ```
 
+### Angular 21
+
+The compiler option exists since Angular 22.1.4. Before that, `ng add` only adds the provider (skip
+steps 1 and 2 of the manual setup), and a preload turns the source locations on when you start the
+dev server:
+
+```sh
+NODE_OPTIONS="--import ngx-source-inspector/enable-source-locations" ng serve
+```
+
+You can put that in the `start` script of your `package.json`. On Windows, set the variable with
+[cross-env](https://www.npmjs.com/package/cross-env).
+
+The preload calls `setEnableTemplateSourceLocations()`, which `@angular/compiler` exports for
+Angular's own tests, in the process that compiles your templates. It only does something for the dev
+server (`ng serve`, or a `serve` target): `ng build` and the other commands ignore it.
+
+Once you're on Angular 22.2 or later, remove it and run `ng add ngx-source-inspector` again.
+
 ## Options
 
 ```ts
@@ -92,6 +111,8 @@ for production:
   becomes an empty provider list and the inspector code is dropped from the bundle.
 - The template paths come from the compiler option. If you turn it on in `tsconfig.app.json`, every
   template path ships in your production bundle. That's why it goes in a development-only tsconfig.
+- In Angular 21, the preload only turns the source locations on for the dev server, so a production
+  build stays clean even if `NODE_OPTIONS` is set for it too.
 
 This repository's CI builds the demo app for production and fails if the bundle contains any
 inspector code, `data-ng-source-location` attribute or template path. To check your own app, build
@@ -129,6 +150,7 @@ npm run build:lib         # library and ng-add schematic, in dist/ngx-source-ins
 npm start                 # demo app with the inspector
 npm test                  # unit tests and schematic tests
 npm run check:production  # production build of the demo, checked for leftovers
+npm run check:angular-21  # ng add, ng serve and a production build in a new Angular 21 app
 ```
 
 The first prototype, linked from the Angular issue, is tagged

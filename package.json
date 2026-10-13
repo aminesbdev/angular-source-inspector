@@ -7,9 +7,11 @@
     "build": "npm run build:lib && ng build inspector-demo",
     "build:lib": "ng build ngx-source-inspector && npm run build:schematics && node scripts/copy-package-files.mjs",
     "build:schematics": "tsc -p projects/ngx-source-inspector/tsconfig.schematics.json && node scripts/copy-schematics-assets.mjs",
-    "test": "ng test ngx-source-inspector --watch=false && npm run test:schematics",
+    "test": "ng test ngx-source-inspector --watch=false && npm run test:schematics && npm run test:preload",
     "test:schematics": "tsc -p projects/ngx-source-inspector/tsconfig.schematics.spec.json && node --test out-tsc/schematics/ng-add/index.spec.js",
-    "check:production": "ng build inspector-demo --configuration production && node scripts/check-production-bundle.mjs"
+    "test:preload": "node --test projects/ngx-source-inspector/node/enable-source-locations.spec.mjs",
+    "check:production": "ng build inspector-demo --configuration production && node scripts/check-production-bundle.mjs",
+    "check:angular-21": "node scripts/check-angular-21.mjs"
   },
   "private": true,
   "packageManager": "npm@11.19.0",

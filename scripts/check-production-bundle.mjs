@@ -1,8 +1,9 @@
 // Fails if anything from the inspector or the template source locations made it into the
 // production build of the demo app. Run after `ng build inspector-demo --configuration production`.
+// Another app's output directory can be given as an argument.
 import { globSync, readFileSync } from 'node:fs';
 
-const outputDir = 'dist/inspector-demo/browser';
+const outputDir = process.argv[2] ?? 'dist/inspector-demo/browser';
 const forbidden = [
   // The inspector itself.
   'ngx-source-inspector',

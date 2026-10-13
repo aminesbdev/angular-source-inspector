@@ -19,3 +19,5 @@ jobs:
       - run: npm test
       - name: Check that nothing ends up in production bundles
         run: npm run check:production
+      - name: Check the package with Angular 21
+        run: npm run check:angular-21
